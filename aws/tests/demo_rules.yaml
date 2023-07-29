@@ -1,5 +1,5 @@
 rules:
   - name: S3RestrictPublicBuckets
     check: NewS3RestrictPublicBucketsCheck
-  - name: AnotherRule
-    check: AnotherCheckFunction
+  - name: S3RequireLoggingCheck
+    check: NewS3RequireLoggingCheck

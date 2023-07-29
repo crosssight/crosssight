@@ -32,6 +32,7 @@ type Check interface {
 // implement rule check mapping
 var ruleCheckMapping = map[string]func() checks.Check{
 	"NewS3RestrictPublicBucketsCheck": checks.NewS3RestrictPublicBucketsCheck,
+	"NewS3RequireLoggingCheck":        checks.NewS3RequireLoggingCheck,
 }
 
 // scanCmd represents the scan command
@@ -70,6 +71,9 @@ to quickly create a Cobra application.`,
 		if err != nil {
 			fmt.Errorf("failed to unmarshal rules YAML: %v", err)
 		}
+
+		// Print the rules to the console for debugging
+		fmt.Printf("rules: %v\n", rules)
 
 		filePath, err := cmd.Flags().GetString("file")
 		if err != nil {

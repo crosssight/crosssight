@@ -1,0 +1,5 @@
+rules:
+  - name: S3RestrictPublicBuckets
+    check: NewS3RestrictPublicBucketsCheck
+  - name: AnotherRule
+    check: AnotherCheckFunction

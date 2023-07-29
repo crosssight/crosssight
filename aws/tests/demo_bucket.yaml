@@ -1,0 +1,77 @@
+apiVersion: s3.aws.crossplane.io/v1beta1
+kind: Bucket
+metadata:
+  name: example-bucket
+  namespace: default
+spec:
+  forProvider:
+    acl: public-read
+    locationConstraint: us-west-2
+    grantFullControl: id=example1
+    grantRead: id=example2
+    grantReadACP: id=example3
+    grantWrite: id=example4
+    grantWriteACP: id=example5
+    objectLockEnabledForBucket: true
+    objectOwnership: BucketOwnerPreferred
+    serverSideEncryptionConfiguration: 
+      rule:
+        applyServerSideEncryptionByDefault:
+          sseAlgorithm: AES256
+    versioningConfiguration:
+      status: Enabled
+    accelerateConfiguration:
+      status: Enabled
+    corsConfiguration:
+      corsRules:
+        - allowedHeaders: ["*"]
+          allowedMethods: ["GET"]
+          allowedOrigins: ["*"]
+          maxAgeSeconds: 3000
+    websiteConfiguration:
+      indexDocument:
+        suffix: index.html
+    loggingConfiguration:
+      destinationBucketName: log-bucket
+      logFilePrefix: log-prefix
+    paymentConfiguration:
+      payer: Requester
+    bucketTagging:
+      tagSet:
+        - key: "Environment"
+          value: "Test"
+    replicationConfiguration:
+      role: "arn:aws:iam::123456789012:role/example"
+    lifecycleConfiguration:
+      rules:
+        - id: "Move rotated logs to Glacier"
+          status: "Enabled"
+    notificationConfiguration:
+      lambdaFunctionConfigurations:
+        - lambdaFunctionArn: "arn:aws:lambda:us-west-2:123456789012:function:Example"
+    publicAccessBlockConfiguration:
+      blockPublicAcls: true
+      restrictPublicBuckets: true
+    policy: 
+      version: "2012-10-17"
+      statement:
+        - action:
+            - s3:GetObject
+          effect: Allow
+          resource: 
+            - "arn:aws:s3:::example-bucket/*"
+          condition:
+            StringEquals:
+              s3:ExistingObjectTag/Department: "Finance"
+          principal:
+            AWS: "*"
+          notAction: []
+          notResource: []
+          notPrincipal: {}
+          sid: "AllowGetObject"
+  writeConnectionSecretToRef:
+    name: s3bucket
+    namespace: crossplane-system
+status:
+  atProvider:
+    arn: arn:aws:s3:::example-bucket

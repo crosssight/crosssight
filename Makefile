@@ -6,7 +6,7 @@
 all: build
 
 build:
-	@go build -o /Users/jonathanpick/go/bin/crosscheck
+	@go build -o ~/go/bin/crosssight
 
 clean:
-	@rm -rf /Users/jonathanpick/go/bin/crosscheck
+	@rm -rf ~/go/bin/crosssight
